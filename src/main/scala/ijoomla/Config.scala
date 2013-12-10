@@ -15,34 +15,21 @@ object Config {
 
   object JomSocial {
 
-    lazy val newUser = {
-      val <user>
-        <firstname>{firstname}</firstname>
-        <lastname>{lastname}</lastname>
-        <email>{email}</email>
-        <username>{username}</username>
-        <password>{password}</password>
-        <streetaddress>{streetaddress}</streetaddress>
-        <country>{country}</country>
-        <state>{state}</state>
-        <city>{city}</city>
-        <postalcode>{postcode}</postalcode>
-        <card>
-          <type>{brand}</type>
-          <number>{number}</number>
-          <ccv>{sec}</ccv>
-          <expiry>
-            <month>{month}</month>
-            <year>{year}</year>
-          </expiry>
-        </card>
-      </user> = XML.loadString(properties.getProperty("NEW_USER"))
+    val newUser = {
+      val xml = XML.loadString(properties.getProperty("NEW_USER"))
+      def t(node: String*) = {
+        def t(x: NodeSeq, node: Seq[String]): String = node match {
+          case n :: Nil => (x \ n).text
+          case n :: ns => t(x \ n, ns)
+        }
+        t(xml, node.toList)
+      }
 
-      User(firstname.text, lastname.text, email.text, username.text, password.text,
-        Address(streetaddress.text, city.text, state.text, postcode.text, country.text),
-        Card(brand.text, number.text, sec.text, Expiry(month.text, year.text)))
+      User(t("firstname"), t("lastname"), t("email"), t("username"), t("password"),
+        Address(t("streetaddress"), t("city"), t("state"), t("postcode"), t("country")),
+        Card(t("card","type"),t("card","number"), t("card","ccv"),
+          Expiry(t("card","expiry","month"), t("card","expiry","year"))))
     }
-
 
   }
 }

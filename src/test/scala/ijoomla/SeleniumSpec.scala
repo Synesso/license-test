@@ -30,7 +30,7 @@ trait SeleniumSpec extends Specification {
   }
 
   def cleanUp() {
-//    driver.quit()
+    driver.quit()
   }
 
 

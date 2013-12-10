@@ -15,7 +15,7 @@ class LoginOrRegisterPage(driver: WebDriver) {
       "password_confirm" -> user.password
     ).foreach{case (k,v) => driver.findElement(By.id(k)).sendKeys(v)}
     driver.findElement(By.id("continue_button")).click()
-    this // ???
+    new MakePaymentPage(driver)
   }
 
 }
