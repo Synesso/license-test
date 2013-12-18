@@ -23,9 +23,7 @@ class JomSocialLicenseSpec extends SeleniumSpec { def is =s2"""
 
     JomSocialAdminPage.openUserManagerTab(driver).delete(user).logout()
 
-    val authNetPage = AuthNetPage.open(driver)
-    authNetPage.firstOneCentTxn.foreach(_.void)
-    authNetPage.logout()
+    AuthNetPage.open(driver).voidFirstOneCentTransaction.logout()
 
     Success()
   }

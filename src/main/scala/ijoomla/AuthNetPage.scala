@@ -32,6 +32,11 @@ class AuthNetPage(driver: WebDriver) {
 
   def firstOneCentTxn = oneCentTxns.headOption
 
+  def voidFirstOneCentTransaction = {
+    firstOneCentTxn.foreach(_.void)
+    this
+  }
+
   class Authorisation(e: WebElement) {
 
     def void = {
