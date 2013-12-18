@@ -1,6 +1,7 @@
 package ijoomla
 
 import org.openqa.selenium.{By, WebDriver}
+import org.openqa.selenium.remote.ErrorHandler.UnknownServerException
 
 class MakePaymentPage(driver: WebDriver) {
 
@@ -20,7 +21,9 @@ class MakePaymentPage(driver: WebDriver) {
       "cardstate" -> user.address.state,
       "cardcity" -> user.address.city,
       "cardzip" -> user.address.postcode
-    ).foreach{case (k,v) => driver.findElement(By.id(k)).sendKeys(v)}
+    ).map{case (k,v) =>
+      driver.findElement(By.id(k)).sendKeys(v)
+    }
     driver.findElement(By.id("authorizebutton")).click()
     new LicencesPage(driver)
 

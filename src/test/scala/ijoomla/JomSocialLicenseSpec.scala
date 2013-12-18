@@ -10,13 +10,23 @@ class JomSocialLicenseSpec extends SeleniumSpec { def is =s2"""
 """
 
   def newUserAuthNet = {
+    val user = Config.JomSocial.newUser
 
-    val page = JomSocialPage.open(driver)
-    val cartPage = page.buyStandard
-    val loginOrRegisterPage = cartPage.discount.payWithCC
-    val makePaymentPage = loginOrRegisterPage.register(Config.JomSocial.newUser)
-    val licencesPage = makePaymentPage.payAs(Config.JomSocial.newUser)
+    val licencesPage = JomSocialPage.open(driver)
+      .buyStandard
+      .discount
+      .payWithCC
+      .register(user)
+      .payAs(user)
+
     licencesPage.mustHaveALicense
+
+    JomSocialAdminPage.openUserManagerTab(driver).delete(user).logout()
+
+    val authNetPage = AuthNetPage.open(driver)
+    authNetPage.firstOneCentTxn.foreach(_.void)
+    authNetPage.logout()
+
     Success()
   }
 

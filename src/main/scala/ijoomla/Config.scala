@@ -11,7 +11,15 @@ object Config {
 
   lazy val phantomJsBinary = properties.getProperty("PHANTOMJS_BIN")
   lazy val baseUrl = properties.getProperty("BASE_URL")
+  lazy val baseAdminUrl = properties.getProperty("BASE_ADMIN_URL")
   lazy val jsPromo = properties.getProperty("JS_PROMO")
+  lazy val jsAdminUser = properties.getProperty("JS_AU")
+  lazy val jsAdminPwd = properties.getProperty("JS_AP")
+  lazy val aNet = new {
+    val url = properties.getProperty("AN_URL")
+    val u = properties.getProperty("AN_U")
+    val p = properties.getProperty("AN_P")
+  }
 
   object JomSocial {
 

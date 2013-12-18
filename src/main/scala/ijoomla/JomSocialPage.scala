@@ -9,7 +9,6 @@ object JomSocialPage {
 }
 
 class JomSocialPage(driver: WebDriver) {
-
   def open: JomSocialPage = {
     driver.get(Config.baseUrl)
     this

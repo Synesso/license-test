@@ -6,12 +6,14 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.phantomjs.{PhantomJSDriver, PhantomJSDriverService}
 import java.util.Arrays._
 import org.specs2.specification.{Fragments, Step}
+import java.util.concurrent.TimeUnit._
 
 trait SeleniumSpec extends Specification {
 
   override def map(fs: =>Fragments) = fs ^ Step(cleanUp())
 
   lazy val driver = firefoxDriver
+  driver.manage.timeouts.implicitlyWait(30, SECONDS)
 
   lazy val firefoxDriver = {
     val capabilities = DesiredCapabilities.firefox
@@ -30,7 +32,7 @@ trait SeleniumSpec extends Specification {
   }
 
   def cleanUp() {
-    driver.quit()
+//    driver.quit()
   }
 
 
