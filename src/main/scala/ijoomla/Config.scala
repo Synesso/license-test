@@ -20,6 +20,8 @@ object Config {
     val u = properties.getProperty("AN_U")
     val p = properties.getProperty("AN_P")
   }
+  lazy val remoteDriverUrl = properties.getProperty("REMOTE_DRIVER_URL")
+  lazy val driver = properties.getProperty("DRIVER", "firefox")
 
   object JomSocial {
 
