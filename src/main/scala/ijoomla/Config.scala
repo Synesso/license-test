@@ -7,39 +7,34 @@ import scala.xml.{NodeSeq, XML}
 object Config {
 
   val properties = new Properties()
-  properties.load(new FileReader(".env"))
-
-  lazy val phantomJsBinary = properties.getProperty("PHANTOMJS_BIN")
-  lazy val baseUrl = properties.getProperty("BASE_URL")
-  lazy val baseAdminUrl = properties.getProperty("BASE_ADMIN_URL")
-  lazy val jsPromo = properties.getProperty("JS_PROMO")
-  lazy val jsAdminUser = properties.getProperty("JS_AU")
-  lazy val jsAdminPwd = properties.getProperty("JS_AP")
-  lazy val aNet = new {
-    val url = properties.getProperty("AN_URL")
-    val u = properties.getProperty("AN_U")
-    val p = properties.getProperty("AN_P")
+  try {
+    properties.load(new FileReader(".env"))
+  } catch {
+    case _: Throwable => {}
   }
-  lazy val remoteDriverUrl = properties.getProperty("REMOTE_DRIVER_URL")
-  lazy val driver = properties.getProperty("DRIVER", "firefox")
+
+  def prop(key: String) = if (properties.containsKey(key)) properties.getProperty(key) else sys.env(key)
+
+  lazy val phantomJsBinary = prop("PHANTOMJS_BIN")
+  lazy val baseUrl = prop("BASE_URL")
+  lazy val baseAdminUrl = prop("BASE_ADMIN_URL")
+  lazy val jsPromo = prop("JS_PROMO")
+  lazy val jsAdminUser = prop("JS_AU")
+  lazy val jsAdminPwd = prop("JS_AP")
+  lazy val aNet = new {
+    val url = prop("AN_URL")
+    val u = prop("AN_U")
+    val p = prop("AN_P")
+  }
+  lazy val remoteDriverUrl = prop("REMOTE_DRIVER_URL")
+  lazy val driver = prop("DRIVER")
 
   object JomSocial {
 
-    val newUser = {
-      val xml = XML.loadString(properties.getProperty("NEW_USER"))
-      def t(node: String*) = {
-        def t(x: NodeSeq, node: Seq[String]): String = node match {
-          case n :: Nil => (x \ n).text
-          case n :: ns => t(x \ n, ns)
-        }
-        t(xml, node.toList)
-      }
-
-      User(t("firstname"), t("lastname"), t("email"), t("username"), t("password"),
-        Address(t("streetaddress"), t("city"), t("state"), t("postcode"), t("country")),
-        Card(t("card","type"),t("card","number"), t("card","ccv"),
-          Expiry(t("card","expiry","month"), t("card","expiry","year"))))
-    }
+    val newUser = User(prop("NEW_USER_FN"), prop("NEW_USER_LN"), prop("NEW_USER_EMAIL"), prop("NEW_USER_USERNAME"),
+      prop("NEW_USER_PASSWORD"), Address(prop("NEW_USER_ADDR"), prop("NEW_USER_CITY"), prop("NEW_USER_STATE"),
+        prop("NEW_USER_POSTCODE"), prop("NEW_USER_COUNTRY")), Card(prop("CARD_TYPE"), prop("CARD_NUM"),
+        prop("CARD_CVV"), Expiry(prop("CARD_EXP_MON"), prop("CARD_EXP_YR"))))
 
   }
 }

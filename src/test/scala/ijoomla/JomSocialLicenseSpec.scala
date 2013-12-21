@@ -10,6 +10,7 @@ class JomSocialLicenseSpec extends SeleniumSpec { def is =s2"""
 """
 
   def newUserAuthNet = {
+
     val user = Config.JomSocial.newUser
 
     val licencesPage = JomSocialPage.open(driver)
