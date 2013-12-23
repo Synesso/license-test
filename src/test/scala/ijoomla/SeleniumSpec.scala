@@ -11,7 +11,7 @@ import java.net.URL
 
 trait SeleniumSpec extends Specification {
 
-  override def map(fs: =>Fragments) = fs ^ Step(cleanUp())
+  override def map(fs: => Fragments) = fs ^ Step(close())
 
   lazy val driver = Config.driver match {
     case "remote" => remoteDriver
@@ -44,7 +44,7 @@ trait SeleniumSpec extends Specification {
     new RemoteWebDriver(new URL(Config.remoteDriverUrl), capabilities)
   }
 
-  def cleanUp() {
+  def close() {
     driver.quit()
   }
 

@@ -1,6 +1,8 @@
 package ijoomla
 
 import org.openqa.selenium.{By, WebDriver}
+import scala.collection.JavaConverters._
+
 
 class LicencesPage(driver: WebDriver) {
 
@@ -12,6 +14,14 @@ class LicencesPage(driver: WebDriver) {
       case None => assert(assertion = false, "There was no licence displayed")
     }
     this
+  }
+
+  def buyStandard = JomSocialPage.open(driver).buyStandard
+
+  def logout() = {
+    // sometimes creating a login will log you in, sometimes it won't. Try to log out, if you can...
+    val logoutButtons = driver.findElements(By.cssSelector("ul.nav:nth-child(1) > li:nth-child(9) > a:nth-child(1)")).asScala
+    logoutButtons.headOption.foreach(_.click())
   }
 
 }

@@ -18,4 +18,11 @@ class LoginOrRegisterPage(driver: WebDriver) {
     new MakePaymentPage(driver)
   }
 
+  def loginAs(user: User) = {
+    driver.findElement(By.id("username")).sendKeys(user.username)
+    driver.findElement(By.id("passwd")).sendKeys(user.password)
+    driver.findElement(By.className("btn-inverse")).click()
+    new MakePaymentPage(driver)
+  }
+
 }
